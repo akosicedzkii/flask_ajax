@@ -1,2 +1,5 @@
+configparser
+mysqlclient
+mysql-python
 flask
 flask_mysqldb
