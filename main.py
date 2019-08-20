@@ -1,13 +1,18 @@
-from flask import Flask, render_template, redirect, url_for, request
+import sys
+import os
+import imports
+
+from flask import Flask, render_template, redirect, url_for, request, session
 from flask_mysqldb import MySQL
 import json
 app = Flask(__name__)
-
+app.secret_key = "cedzkii123"  
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'flask'
 mysql = MySQL(app)
+
 
 @app.route('/')
 def hello_world():
@@ -33,20 +38,36 @@ def add_user():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    error = None
-    return render_template('login_view.html', error=error)
+    if 'username' not in session:  
+        error = None
+        return render_template('login_view2.html', error=error)
+    else:
+        return "Loggedin"
 
 @app.route('/validate_login/', methods=['GET', 'POST'])
 def validate_login():
     print(request.get_json())
     values = request.get_json()
     if request.method == 'POST':
-        if values['username'] != '' or values['password'] != '':
-            return 'Invalid Credentials. Please try again.'
+        if values['username'] == 'admin' or values['password'] == 'admin':
+            session['username']=values['username'] 
+            return 'success'
         else:
             return 'Hwew!'
     else:
             return 'Hello, World!'    
+
+@app.route('/users', methods=['GET', 'POST'])
+def users():
+    return imports.users.sample()
+
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    if 'username' not in session:  
+        session.pop('email',None)  
+        return render_template('login_view2.html', error=error)
+    else:
+        return "Loggedin"
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
