@@ -42,7 +42,7 @@ def login():
         error = None
         return render_template('login_view2.html', error=error)
     else:
-        return "Loggedin"
+        return redirect(url_for('add_user'))
 
 @app.route('/validate_login/', methods=['GET', 'POST'])
 def validate_login():
@@ -63,11 +63,11 @@ def users():
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
-    if 'username' not in session:  
-        session.pop('email',None)  
-        return render_template('login_view2.html', error=error)
+    if 'username' in session:  
+        session.pop('username',None)  
+        return redirect(url_for('login'))
     else:
-        return "Loggedin"
+        return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

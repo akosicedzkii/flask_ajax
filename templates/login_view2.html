@@ -90,7 +90,7 @@
       checkboxClass: 'icheckbox_square-blue',
       radioClass: 'iradio_square-blue',
       increaseArea: '20%' /* optional */
-    });
+    }); 
   });
   
 </script>
@@ -103,7 +103,14 @@
           data: JSON.stringify(values) ,
           contentType: "application/json",
           success: function (response) {
-              console.log(response);
+              if(response == "success")
+              {
+                window.location = "";
+              }
+              else
+              {
+
+              }
           },
           error: function(jqXHR, textStatus, errorThrown) {
           console.log(textStatus, errorThrown);
