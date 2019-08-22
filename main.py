@@ -1,19 +1,6 @@
-import sys
-import os
-import imports
-
-from flask import Flask, render_template, redirect, url_for, request, session
-from flask_mysqldb import MySQL
-import json
-app = Flask(__name__)
-app.secret_key = "cedzkii123"  
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'flask'
-mysql = MySQL(app)
-
-
+import config
+from flask import render_template, redirect, url_for, request, session
+app = config.app
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
@@ -34,7 +21,7 @@ def add_user():
             return "success"
         else:
             return 'Hello, World!'
-    return render_template('add_user.html', error=error)
+    return render_template('main_view.html', error=error)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -59,7 +46,8 @@ def validate_login():
 
 @app.route('/users', methods=['GET', 'POST'])
 def users():
-    return imports.users.sample()
+    users = imports.users.Users()
+    return users.sample()
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
