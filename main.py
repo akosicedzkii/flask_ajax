@@ -1,9 +1,10 @@
 import config
 from flask import render_template, redirect, url_for, request, session
+from werkzeug import secure_filename
 app = config.app
 @app.route('/')
 def hello_world():
-    return 'Hello, World!'
+    return redirect(url_for('login'))
 
 # Route for handling the login page logic
 @app.route('/add_user', methods=['GET', 'POST'])
@@ -56,6 +57,15 @@ def logout():
         return redirect(url_for('login'))
     else:
         return redirect(url_for('login'))
-
+@app.route('/upload')
+def upload():
+    return render_template('file_upload.html')
+	
+@app.route('/uploader', methods = ['GET', 'POST'])
+def uploader():
+    if request.method == 'POST':
+        f = request.files['file']
+        f.save("uploads/" + secure_filename(f.filename))
+        return 'file uploaded successfully'
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
